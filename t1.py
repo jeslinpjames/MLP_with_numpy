@@ -12,22 +12,20 @@ x_train = X_train.reshape(X_train.shape[0], -1) / 255.0
 x_test = X_test.reshape(X_test.shape[0], -1) / 255.0
 
 def init_params():
-    #Hidden Layer parameters
-    W1 = np.random.randn(10, 784) * np.sqrt(2/784)
-    b1 = np.zeros((10, 1))
-
-    #Output layer parameters
-    W2 = np.random.randn(10, 10) * np.sqrt(2/10)
-    b2 = np.zeros((10, 1))
-
+    W1 = np.random.randn(10, 784) * 0.01
+    b1 = np.random.randn(10, 1) * 0.01
+    W2 = np.random.randn(10, 10) * 0.01
+    b2 = np.random.randn(10, 1) * 0.01
     return W1, b1, W2, b2
 
-def ReLU(x):
-    return np.maximum(0, x)
 
-def softmax(z):
-    exp_z = np.exp(z - np.max(z))
-    return exp_z / exp_z.sum(axis = 0)
+def ReLU(Z):
+    return np.maximum(Z,0)
+
+def softmax(Z):
+    e_Z = np.exp(Z - np.max(Z, axis=0, keepdims=True))
+    A = e_Z / np.sum(e_Z, axis=0, keepdims=True)
+    return A
 
 def feed_forward(W1, b1, W2, b2, x):
     #Hidden Layer
@@ -41,8 +39,9 @@ def feed_forward(W1, b1, W2, b2, x):
     return Z1, a1, Z2, a2
 
 def one_hot(Y):
-    one_hot_Y = np.zeros((Y.max() + 1, Y.size))
-    one_hot_Y[Y, np.arange(Y.size)] = 1
+    one_hot_Y = np.zeros((Y.max()+1,Y.size))
+    one_hot_Y[Y,np.arange(Y.size)]=1
+    # one_hot_Y=one_hot_Y.T
     return one_hot_Y
 
 def back_propagation(Z1, a1, Z2, a2, W1, W2, x, y):
@@ -60,11 +59,11 @@ def back_propagation(Z1, a1, Z2, a2, W1, W2, x, y):
     dB1 = np.sum(dZ1, 1) / m  #Derivative of the hidden layer biases
     return dW1, dB1, dW2, dB2
 
-def update_params(W1, b1, W2, b2, dW1, dB1, dW2, dB2, alpha):
+def update_params(W1,b1,W2,b2,dW1,db1,dW2,db2,alpha):
     W1 -= alpha * dW1
-    b1 -= alpha * np.reshape(dB1,(10, 1))
+    b1 -= alpha * np.reshape(db1,(10, 1))
     W2 -= alpha * dW2
-    b2 -= alpha * np.reshape(dB2, (10, 1))
+    b2 -= alpha * np.reshape(db2, (10, 1))
     return W1, b1, W2, b2
 
 def loss_and_accuracy(y_pred, y_true):
