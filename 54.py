@@ -10,10 +10,10 @@ x_test = x_test.reshape(x_test.shape[0], -1) / 255.0
 # print(x_train[0].shape, x_test[0].shape)
 
 def init_params():
-    W1 = np.random.randn(256, 784) * 0.01
-    b1 = np.random.randn(256, 1) * 0.01
-    W2 = np.random.randn(10, 256) * 0.01
-    b2 = np.random.randn(10, 1) * 0.01
+    W1 = np.random.randn(10, 784) * np.sqrt(2/784)
+    b1 = np.random.randn(10, 1) 
+    W2 = np.random.randn(10, 10) * np.sqrt(2/10)
+    b2 = np.random.randn(10, 1) 
     return W1, b1, W2, b2
 
 
@@ -102,4 +102,4 @@ def gradient_descent(X,Y,iterations,alpha):
     return W1,b1,W2,b2
 
 
-W1,b1,W2,b2= gradient_descent(x_train,y_train,601,0.002)
+W1,b1,W2,b2= gradient_descent(x_train,y_train,2001,0.002)

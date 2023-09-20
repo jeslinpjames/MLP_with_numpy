@@ -22,6 +22,7 @@ def init_params():
 
     return W1, b1, W2, b2
 
+
 def ReLU(x):
     return np.maximum(0, x)
 
