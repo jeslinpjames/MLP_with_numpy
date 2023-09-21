@@ -27,15 +27,15 @@ def softmax(Z):
 
 
 def forward_prop(W1,b1,W2,b2,X):
-    Z1=X.dot(W1.T)+b1.T
+    Z1=W1.dot(X.T)+b1
     A1=ReLU(Z1)
-    Z2=A1.dot(W2.T)+b2.T
+    Z2=W2.dot(A1 )+b2
     A2=softmax(Z2)
     return Z1,A1,Z2,A2
 
 def one_hot(Y):
-    one_hot_Y = np.zeros((Y.size,Y.max()+1))
-    one_hot_Y[np.arange(Y.size),Y]=1
+    one_hot_Y = np.zeros((Y.max()+1,Y.size))
+    one_hot_Y[Y,np.arange(Y.size)]=1
     # one_hot_Y=one_hot_Y.T
     return one_hot_Y
 
@@ -58,11 +58,11 @@ def deriv_ReLU(Z):
 def back_prop(Z1, A1, Z2, A2, W2, Y, X):
     one_hot_Y = one_hot(Y)
     m = Y.size
-    dZ2 = A2 - one_hot_Y
-    dW2 = dZ2.T.dot(A1) / m
+    dZ2 = 2*(A2 - one_hot_Y)
+    dW2 = dZ2.dot(A1.T) / m
     db2 = np.sum(dZ2, axis=1, keepdims=True) / m
 
-    dZ1 = W2.T.dot(dZ2.T) * deriv_ReLU(Z1).T
+    dZ1 = W2.dot(dZ2) * deriv_ReLU(Z1)
     dW1 = dZ1.dot(X) / m
     db1 = np.sum(dZ1, axis=1, keepdims=True) / m
     return dW1, db1, dW2, db2
@@ -102,4 +102,4 @@ def gradient_descent(X,Y,iterations,alpha):
     return W1,b1,W2,b2
 
 
-W1,b1,W2,b2= gradient_descent(x_train,y_train,2001,0.002)
+W1,b1,W2,b2= gradient_descent(x_train,y_train,2001,0.001)
