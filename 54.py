@@ -21,8 +21,8 @@ def ReLU(Z):
     return np.maximum(Z,0)
 
 def softmax(Z):
-    e_Z = np.exp(Z - np.max(Z, axis=0, keepdims=True))
-    A = e_Z / np.sum(e_Z, axis=0, keepdims=True)
+    e_Z = np.exp(Z - np.max(Z))
+    A = e_Z / e_Z.sum( axis=0)
     return A
 
 

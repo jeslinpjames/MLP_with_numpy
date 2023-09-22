@@ -91,9 +91,26 @@ def neural_network(x, y, epochs, alpha):
             loss, accuracy = loss_and_accuracy(pred, y)
             print(f'Loss: {loss:.4f}\t Accuracy: {accuracy*100:.2f} %')
     return W1, b1, W2, b2
-W1, b1, W2, b2 = neural_network(x_train, y_train, 2001, 0.1)
+W1, b1, W2, b2 = neural_network(x_train, y_train, 3001, 0.15)
 
 def make_predictions(X, W1, b1, W2, b2):
     _, _, _, A2 = feed_forward(W1, b1, W2, b2, X)
     pred = np.argmax(A2, 0)
     return pred
+
+def calculate_test_accuracy(X_test, y_test, W1, b1, W2, b2):
+    # Make predictions using the trained model
+    predictions = make_predictions(X_test, W1, b1, W2, b2)
+
+    # Calculate accuracy
+    accuracy = np.mean(predictions == y_test)
+    
+    return accuracy
+
+# Calculate and print the test accuracy
+test_accuracy = calculate_test_accuracy(x_test, y_test, W1, b1, W2, b2)
+print(f"Test Accuracy: {test_accuracy * 100:.2f} %")
+
+
+# Save the trained weights and biases to a file
+np.save('model_weights_1.npy', {'W1': W1, 'b1': b1, 'W2': W2, 'b2': b2})
