@@ -38,7 +38,6 @@ def feed_forward(W1, b1, W2, b2, x):
     #Output Layer
     Z2 = W2.dot(a1) + b2  #Matrix Multiplication with the hidden layer
     a2 = softmax(Z2)  #Softmax Activation
-
     return Z1, a1, Z2, a2
 
 def one_hot(Y):
@@ -92,7 +91,6 @@ def neural_network(x, y, epochs, alpha):
             loss, accuracy = loss_and_accuracy(pred, y)
             print(f'Loss: {loss:.4f}\t Accuracy: {accuracy*100:.2f} %')
     return W1, b1, W2, b2
-print(y_train.shape)
 W1, b1, W2, b2 = neural_network(x_train, y_train, 2001, 0.1)
 
 def make_predictions(X, W1, b1, W2, b2):

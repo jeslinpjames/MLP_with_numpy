@@ -2,7 +2,7 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 import keras.datasets.mnist as mnist
-
+ 
 data = mnist.load_data()
 (x_train, y_train), (x_test, y_test) = data
 x_train = x_train.reshape(x_train.shape[0], -1) /255.0
@@ -60,20 +60,20 @@ def back_prop(Z1, A1, Z2, A2, W2, Y, X):
     m = Y.size
     dZ2 = 2*(A2 - one_hot_Y)
     dW2 = dZ2.dot(A1.T) / m
-    db2 = np.sum(dZ2, axis=1, keepdims=True) / m
+    db2 = np.sum(dZ2, axis=1) / m
 
     dZ1 = W2.dot(dZ2) * deriv_ReLU(Z1)
     dW1 = dZ1.dot(X) / m
-    db1 = np.sum(dZ1, axis=1, keepdims=True) / m
+    db1 = np.sum(dZ1, axis=1) / m
     return dW1, db1, dW2, db2
 
 
 
 def update_params(W1,b1,W2,b2,dW1,db1,dW2,db2,alpha):
     W1= W1-alpha*dW1
-    b1= b1- alpha*db1
+    b1= b1- alpha*np.reshape(db1,(10,1))
     W2 = W2 - alpha*dW2
-    b2= b2- alpha*db2.T
+    b2= b2- alpha*np.reshape(db2,(10,1))
     return W1,b1,W2,b2
 
 def get_predictions(A2):
