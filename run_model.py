@@ -1,5 +1,6 @@
 from PIL import Image
 import numpy as np
+import matplotlib.pyplot as plt
 
 # Load the saved weights and biases
 loaded_weights = np.load('model_weights.npy', allow_pickle=True).item()
@@ -23,6 +24,11 @@ def preprocess_image(image_path):
     
     return img_array
 
+def display_image(image_path):
+    img = Image.open(image_path)
+    plt.imshow(img, cmap='gray')
+    plt.axis('off')
+    plt.show()
 
 def ReLU(x):
     return np.maximum(0, x)
@@ -55,4 +61,5 @@ preprocessed_image = preprocess_image(image_path)
 predicted_digit = make_predictions(preprocessed_image, W1_loaded, b1_loaded, W2_loaded, b2_loaded)[0]
 
 # Display the predicted digit
+display_image(image_path)
 print(f"Predicted Digit: {predicted_digit}")
