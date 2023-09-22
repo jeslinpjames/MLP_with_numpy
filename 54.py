@@ -102,4 +102,4 @@ def gradient_descent(X,Y,iterations,alpha):
     return W1,b1,W2,b2
 
 
-W1,b1,W2,b2= gradient_descent(x_train,y_train,2001,0.001)
+W1,b1,W2,b2= gradient_descent(x_train,y_train,2001,0.5)
