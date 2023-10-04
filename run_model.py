@@ -1,4 +1,5 @@
 from PIL import Image
+from model import ReLU, softmax, feed_forward, make_predictions
 import numpy as np
 import matplotlib.pyplot as plt
 
@@ -30,29 +31,6 @@ def display_image(image_path):
     plt.axis('off')
     plt.show()
 
-def ReLU(x):
-    return np.maximum(0, x)
-
-def softmax(z):
-    exp_z = np.exp(z - np.max(z))
-    return exp_z / exp_z.sum(axis = 0)
-
-
-def feed_forward(W1, b1, W2, b2, x):
-    #Hidden Layer
-    Z1 = W1.dot(x.T) + b1  #Matrix Multiplication with the input layer
-    a1 = ReLU(Z1)  #ReLU Activation
-
-    #Output Layer
-    Z2 = W2.dot(a1) + b2  #Matrix Multiplication with the hidden layer
-    a2 = softmax(Z2)  #Softmax Activation
-    return Z1, a1, Z2, a2
-
-
-def make_predictions(X, W1, b1, W2, b2):
-    _, _, _, A2 = feed_forward(W1, b1, W2, b2, X)
-    pred = np.argmax(A2, 0)
-    return pred
 # Load and preprocess a PNG image for recognition
 image_path = 'nine.png'  # Replace with the path to your PNG image
 preprocessed_image = preprocess_image(image_path)

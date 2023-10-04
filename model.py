@@ -34,8 +34,8 @@ def feed_forward(W1, b1, W2, b2, x):
     #Hidden Layer
     Z1 = W1.dot(x.T) + b1  #Matrix Multiplication with the input layer
     a1 = ReLU(Z1)  #ReLU Activation
-    print(Z1.shape, a1.shape)
-    print(a1)
+    #print(Z1.shape, a1.shape)
+    #print(a1)
     #Output Layer
     Z2 = W2.dot(a1) + b2  #Matrix Multiplication with the hidden layer
     a2 = softmax(Z2)  #Softmax Activation
@@ -92,7 +92,7 @@ def neural_network(x, y, epochs, alpha):
             loss, accuracy = loss_and_accuracy(pred, y)
             print(f'Loss: {loss:.4f}\t Accuracy: {accuracy*100:.2f} %')
     return W1, b1, W2, b2
-W1, b1, W2, b2 = neural_network(x_train, y_train, 2001, 0.1)
+
 
 def make_predictions(X, W1, b1, W2, b2):
     _, _, _, A2 = feed_forward(W1, b1, W2, b2, X)
@@ -109,9 +109,12 @@ def calculate_test_accuracy(X_test, y_test, W1, b1, W2, b2):
     return accuracy
 
 # Calculate and print the test accuracy
-test_accuracy = calculate_test_accuracy(x_test, y_test, W1, b1, W2, b2)
-print(f"Test Accuracy: {test_accuracy * 100:.2f} %")
+
+if __name__ == '__main__':
+    W1, b1, W2, b2 = neural_network(x_train, y_train, 2001, 0.1)
+    test_accuracy = calculate_test_accuracy(x_test, y_test, W1, b1, W2, b2)
+    print(f"Test Accuracy: {test_accuracy * 100:.2f} %")
 
 
-# Save the trained weights and biases to a file
-np.save('model_weights.npy', {'W1': W1, 'b1': b1, 'W2': W2, 'b2': b2})
+    # Save the trained weights and biases to a file
+    np.save('model_weights.npy', {'W1': W1, 'b1': b1, 'W2': W2, 'b2': b2})
