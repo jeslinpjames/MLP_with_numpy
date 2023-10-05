@@ -1,8 +1,6 @@
 import numpy as np
-import pandas as pd
-import seaborn as sns
+from acti import ReLU, softmax
 import matplotlib.pyplot as plt
-from sklearn.model_selection import train_test_split
 from keras.datasets import mnist
 
 
@@ -22,13 +20,6 @@ def init_params():
 
     return W1, b1, W2, b2
 
-
-def ReLU(x):
-    return np.maximum(0, x)
-
-def softmax(z):
-    exp_z = np.exp(z - np.max(z))
-    return exp_z / exp_z.sum(axis = 0)
 
 def feed_forward(W1, b1, W2, b2, x):
     #Hidden Layer

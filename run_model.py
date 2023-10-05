@@ -32,7 +32,7 @@ def display_image(image_path):
     plt.show()
 
 # Load and preprocess a PNG image for recognition
-image_path = 'nine.png'  # Replace with the path to your PNG image
+image_path = 'Eight.png'  
 preprocessed_image = preprocess_image(image_path)
 
 # Use the loaded weights to make predictions
