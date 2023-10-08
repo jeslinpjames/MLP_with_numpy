@@ -42,6 +42,11 @@ input_size = 15  # Number of features in your dataset
 hidden_layer_size = 128  
 output_size = 2  # For binary classification
 
+#Training History
+training_loss_history = []
+training_accuracy_history = []
+
+
 
 def init_params(input_size, hidden_layer_size, output_size):
     # Hidden Layer parameters
@@ -113,6 +118,8 @@ def neural_network(x, y, epochs, alpha):
             print('Epoch: ', epoch)
             pred = np.argmax(a2, 0)
             loss, accuracy = loss_and_accuracy(pred, y)
+            training_loss_history.append(loss)
+            training_accuracy_history.append(accuracy)
             print(f'Loss: {loss:.4f}\t Accuracy: {accuracy*100:.2f} %')
     return W1, b1, W2, b2
 
@@ -130,12 +137,32 @@ def calculate_test_accuracy(X_test, y_test, W1, b1, W2, b2):
     accuracy = np.mean(predictions == y_test)
     
     return accuracy
-
+epochs = 5001
 if __name__ == '__main__':
-    W1, b1, W2, b2 = neural_network(X_train, y_train, 5001, 0.25)
+    W1, b1, W2, b2 = neural_network(X_train, y_train, epochs, 0.1)
     test_accuracy = calculate_test_accuracy(X_test, y_test, W1, b1, W2, b2)
     print(f"Test Accuracy: {test_accuracy * 100:.2f} %")
 
 
     # Save the trained weights and biases to a file
     np.save('framingham_model_weights.npy', {'W1': W1, 'b1': b1, 'W2': W2, 'b2': b2})
+
+
+# Plot the learning curve
+plt.figure(figsize=(12, 6))
+plt.subplot(1, 2, 1)
+plt.plot(range(0, epochs, 100), training_loss_history, label='Training Loss')
+plt.xlabel('Epoch')
+plt.ylabel('Loss')
+plt.title('Training Loss Curve')
+plt.legend()
+
+plt.subplot(1, 2, 2)
+plt.plot(range(0, epochs, 100), training_accuracy_history, label='Training Accuracy')
+plt.xlabel('Epoch')
+plt.ylabel('Accuracy')
+plt.title('Training Accuracy Curve')
+plt.legend()
+
+plt.tight_layout()
+plt.show()
