@@ -2,19 +2,44 @@ from acti import ReLU, softmax
 from sklearn.model_selection import train_test_split
 import pandas as pd
 import numpy as np
+import matplotlib.pyplot as plt
+from sklearn.impute import SimpleImputer
+from sklearn.preprocessing import StandardScaler
 
 
+#Reading the data
 data = pd.read_csv('framingham.csv')
 
-X = data.iloc[:, :-1]  
-y = data.iloc[:, -1]   
+
+#Visualizing the data
+fig = plt.figure(figsize = (8,8))
+ax = fig.gca()
+data.hist(ax=ax)
+plt.show()
+
+X = data.iloc[:, :-1].values 
+y = data.iloc[:, -1].values
+
+#Handling missing values
+si = SimpleImputer(missing_values = np.nan, strategy = 'mean')
+X = si.fit_transform(X)
+
+np.isnan(X).sum()
+np.isnan(y).sum()
 
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
-print(X_train.shape, X_test.shape, y_train.shape, y_test.shape)
+
+#Feature Scaling
+sc = StandardScaler()
+X_train = sc.fit_transform(X_train)
+X_test = sc.transform(X_test)
+
+np.isnan(X_train).sum()
+np.isnan(y_train).sum()
 
 
 input_size = 15  # Number of features in your dataset
-hidden_layer_size = 128  # Experiment with different sizes
+hidden_layer_size = 128  
 output_size = 2  # For binary classification
 
 
@@ -68,10 +93,10 @@ def update_params(W1, b1, W2, b2, dW1, dB1, dW2, dB2, alpha):
 
 def loss_and_accuracy(y_pred, y_true):
     #Cross-Entropy Loss
-    epsilon = 1e-15  #Constant
+    epsilon = 1e-10  #Constant
     m = y_true.shape[0]
-    pred_loss = np.clip(y_pred, epsilon, 1.0 - epsilon)
-    loss = - (1 / m) * np.sum(y_true * np.log(y_pred) + (1 - y_true) * np.log(1 - y_pred))
+    # pred_loss = np.clip(y_pred, epsilon, 1.0 - epsilon)
+    loss = - (1 / m) * np.sum(y_true * np.log(y_pred + epsilon) + (1 - y_true) * np.log(1 - y_pred + epsilon))
 
     #Accuracy
     accuracy = np.mean(y_pred == y_true)
@@ -107,7 +132,7 @@ def calculate_test_accuracy(X_test, y_test, W1, b1, W2, b2):
     return accuracy
 
 if __name__ == '__main__':
-    W1, b1, W2, b2 = neural_network(X_train, y_train, 2001, 0.1)
+    W1, b1, W2, b2 = neural_network(X_train, y_train, 5001, 0.25)
     test_accuracy = calculate_test_accuracy(X_test, y_test, W1, b1, W2, b2)
     print(f"Test Accuracy: {test_accuracy * 100:.2f} %")
 
