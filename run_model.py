@@ -1,5 +1,5 @@
 from PIL import Image
-from model import ReLU, softmax, feed_forward, make_predictions
+from mnist_model import ReLU, softmax, feed_forward, make_predictions
 import numpy as np
 import matplotlib.pyplot as plt
 
